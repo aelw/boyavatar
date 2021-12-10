@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+<title>download canvas image to png file</title>
+
+<script>
+
+window.addEventListener('load', function(){
+
+    var cnvs = document.getElementById('cnvs');
+
+    var ctx  = cnvs.getContext('2d');
+
+
+
+    var img = new Image();
+
+    img.src = 'http://www.bloodguy.com/jjal.jpg';
+
+    img.onload = function(){
+
+        // 캔버스에 이미지 그리기
+
+        cnvs.width  = img.width;
+
+        cnvs.height = img.height;
+
+        ctx.drawImage(img, 0, 0);
+
+
+
+	  // 워터마크
+
+        var watermark = 'bloodguy.com';
+
+        ctx.font = '24px Malgun Gothic';
+
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.75)';
+
+        var txt_info = ctx.measureText(watermark);
+
+        var x = cnvs.width - txt_info.width - 10;
+
+        var y = cnvs.height - 10;
+
+        ctx.fillText(watermark, x, y);
+
+
+
+        // 캔버스를 클릭하면 이미지 다운로드
+
+        cnvs.addEventListener('click', function(){
+
+            var dataURL = cnvs.toDataURL('image/png');
+
+            dataURL = dataURL.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+
+            dataURL = dataURL.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
+
+
+
+            var aTag = document.createElement('a');
+
+            aTag.download = 'from_canvas.png';
+
+            aTag.href = dataURL;
+
+            aTag.click();
+
+        });
+
+    }
+
+});
+
+</script>
+
+</head>
+
+
+
+<body>
+
+
+
+<canvas id="cnvs"></canvas>
+
+
+
+</body>
+
+</html>
